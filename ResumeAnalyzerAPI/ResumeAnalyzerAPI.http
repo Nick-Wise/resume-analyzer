@@ -1,4 +1,4 @@
-@ResumeAnalyzerAPI_HostAddress = http://localhost:5086
+@ResumeAnalyzerAPI_HostAddress = http://localhost:5185
 
 GET {{ResumeAnalyzerAPI_HostAddress}}/weatherforecast/
 Accept: application/json
