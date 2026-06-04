@@ -9,8 +9,8 @@ namespace ResumeAnalyzerAPI.Models
     public class AnalysisRequest
     {
         [Required]
-        public required string jobDescription { get; set; }
+        public required string JobDescription { get; set; }
         [Required]
-        public required List<string> skills { get; set; }
+        public required List<string> Skills { get; set; }
     }
 }

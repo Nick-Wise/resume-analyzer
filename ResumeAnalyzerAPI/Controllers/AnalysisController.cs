@@ -22,10 +22,11 @@ namespace ResumeAnalyzerAPI.Controllers
             _analysisService = analysisService;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("GetHistory")]
+        public async Task<IActionResult> Get()
         {
-            return Ok("Analysis results");
+            var result = await _analysisService.GetHistoryAsync();
+            return Ok(result); 
         }
 
         [HttpPost]
@@ -36,16 +37,16 @@ namespace ResumeAnalyzerAPI.Controllers
                 return BadRequest("Request body cannot be null.");
             }
 
-            if(string.IsNullOrWhiteSpace(request.jobDescription))
+            if(string.IsNullOrWhiteSpace(request.JobDescription))
             {
                 return BadRequest("Job description cannot be empty.");
             }
-            if(request.skills == null || request.skills.Count == 0)
+            if(request.Skills == null || request.Skills.Count == 0)
             {
                 return BadRequest("Skills list cannot be empty.");
             }
             // Process the analysis request
-            var result = await _analysisService.AnalyzeAsync(request.jobDescription, request.skills);
+            var result = await _analysisService.AnalyzeAsync(request.JobDescription, request.Skills);
             return Ok(result);
         }
     }

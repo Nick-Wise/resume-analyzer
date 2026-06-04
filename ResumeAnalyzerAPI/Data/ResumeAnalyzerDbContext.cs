@@ -17,9 +17,9 @@ namespace ResumeAnalyzerAPI.Data
             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
             c => c.ToList()
         );
-            ConfigureListProperty<AnalysisRecord>(modelBuilder, p => p.skills, listComparer);
-            ConfigureListProperty<AnalysisRecord>(modelBuilder, p => p.matchedSkills, listComparer);
-            ConfigureListProperty<AnalysisRecord>(modelBuilder, p => p.unmatchedSkills, listComparer);
+            ConfigureListProperty<AnalysisRecord>(modelBuilder, p => p.Skills, listComparer);
+            ConfigureListProperty<AnalysisRecord>(modelBuilder, p => p.MatchedSkills, listComparer);
+            ConfigureListProperty<AnalysisRecord>(modelBuilder, p => p.UnmatchedSkills, listComparer);
         }
 
         private static void ConfigureListProperty<TEntity>(

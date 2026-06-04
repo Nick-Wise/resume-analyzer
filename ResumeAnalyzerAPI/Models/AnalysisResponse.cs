@@ -9,10 +9,10 @@ namespace ResumeAnalyzerAPI.Models
     public class AnalysisResponse
     {
         [Required]
-        public required List<string> matchedSkills { get; set; }
+        public required List<string> MatchedSkills { get; set; }
         [Required]
-        public required List<string> unmatchedSkills { get; set; }
+        public required List<string> UnmatchedSkills { get; set; }
         [Required]
-        public required decimal matchPercentage { get; set; }
+        public required decimal MatchPercentage { get; set; }
     }
 }
