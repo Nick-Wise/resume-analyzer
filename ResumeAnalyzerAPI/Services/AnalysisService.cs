@@ -42,9 +42,6 @@ namespace ResumeAnalyzerAPI.Services
                 {
                     _unmatchedSkills.Add(skill);
                 }
-                Console.WriteLine($"Skill: {skill}");
-                Console.WriteLine($"Pattern: {BuildSkillPattern(skill)}");
-                Console.WriteLine($"Match: {Regex.IsMatch(normalizedDescription, BuildSkillPattern(skill), RegexOptions.IgnoreCase)}");
             }
 
             var _matchPercentage = skills.Count == 0
@@ -102,9 +99,10 @@ namespace ResumeAnalyzerAPI.Services
 
         private static string BuildSkillPattern(string skill)
         {
-            var escapedSkill = Regex.Escape(skill.Trim());
-            escapedSkill = Regex.Replace(escapedSkill, @"\s+", "[\\s\\-]+");
-            return $"(?<![\\p{{L}}\\p{{N}}]){escapedSkill}(?![\\p{{L}}\\p{{N}}])";
+            var word =skill.Split(' ');
+            var escapedSkill = word.Select(word => Regex.Escape(word));
+            var result = string.Join(@"[\s\-]+",escapedSkill);
+            return $"(?<![\\p{{L}}\\p{{N}}]){result}(?![\\p{{L}}\\p{{N}}])";
         }
     }
 }
