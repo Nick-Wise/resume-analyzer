@@ -55,7 +55,7 @@ export default function Home() {
 
           <div>
             <label>Job Description</label>
-            <textarea {...register("jobDescription")} />
+            <textarea className="border" {...register("jobDescription")} />
           </div>
 
           <div>
