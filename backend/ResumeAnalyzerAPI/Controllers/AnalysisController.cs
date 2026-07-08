@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using ResumeAnalyzerAPI.Models;
 using ResumeAnalyzerAPI.Services;
 
 namespace ResumeAnalyzerAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("/api/[controller]")]
     public class AnalysisController : Controller
     {
         private readonly ILogger<AnalysisController> _logger;
@@ -29,7 +23,7 @@ namespace ResumeAnalyzerAPI.Controllers
             return Ok(result); 
         }
 
-        [HttpPost]
+        [HttpPost("analyze")]
         public async Task<IActionResult> Post([FromBody] AnalysisRequest request)
         {
             if(request == null)
@@ -41,7 +35,7 @@ namespace ResumeAnalyzerAPI.Controllers
             {
                 return BadRequest("Job description cannot be empty.");
             }
-            if(request.Skills == null || request.Skills.Count == 0)
+            if(string.IsNullOrEmpty(request.Skills))
             {
                 return BadRequest("Skills list cannot be empty.");
             }

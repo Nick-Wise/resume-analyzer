@@ -19,34 +19,38 @@ namespace ResumeAnalyzerAPI.Services
             _context = context;
         }
 
-        public async Task<AnalysisResponse> AnalyzeAsync(string jobDescription, List<string> skills)
+        public async Task<AnalysisResponse> AnalyzeAsync(string jobDescription, string skills)
         {
+
+            var skillsList = skills.Split(",").ToList();
+            
+
             var _matchedSkills = new List<string>();
             var _unmatchedSkills = new List<string>();
             var normalizedDescription = NormalizeText(jobDescription);
 
-            foreach (var skill in skills)
+            foreach (var skill in skillsList)
             {
-                if (string.IsNullOrWhiteSpace(skill))
+                var trimmedSkill = skill.Trim();
+                if (!string.IsNullOrWhiteSpace(trimmedSkill))
                 {
-                    _unmatchedSkills.Add(skill ?? string.Empty);
-                    continue;
-                }
+                    var pattern = BuildSkillPattern(trimmedSkill);
+                    if (Regex.IsMatch(normalizedDescription, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                    {
+                        _matchedSkills.Add(trimmedSkill);
+                    }
+                    else
+                    {
+                        _unmatchedSkills.Add(trimmedSkill);
+                    }
 
-                var pattern = BuildSkillPattern(skill);
-                if (Regex.IsMatch(normalizedDescription, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-                {
-                    _matchedSkills.Add(skill);
-                }
-                else
-                {
-                    _unmatchedSkills.Add(skill);
                 }
             }
-
-            var _matchPercentage = skills.Count == 0
+            var trimmedSkills =_matchedSkills.Concat(_unmatchedSkills).ToList();
+            var totalSkillsCount = trimmedSkills.Count();
+            var _matchPercentage = totalSkillsCount == 0
                 ? 0m
-                : (decimal)_matchedSkills.Count / skills.Count * 100;
+                : (decimal)_matchedSkills.Count / totalSkillsCount  * 100;
             var response = new AnalysisResponse
             {
                 MatchedSkills = _matchedSkills,
@@ -57,7 +61,7 @@ namespace ResumeAnalyzerAPI.Services
             var analysisRecord = new AnalysisRecord
             {
                 JobDescription = jobDescription,
-                Skills = skills,
+                Skills = trimmedSkills,
                 MatchedSkills = _matchedSkills,
                 UnmatchedSkills = _unmatchedSkills,
                 MatchPercentage = _matchPercentage,
@@ -69,7 +73,8 @@ namespace ResumeAnalyzerAPI.Services
             return response;
         }
 
-        public async Task<List<AnalysisHistoryDto>> GetHistoryAsync(){
+        public async Task<List<AnalysisHistoryDto>> GetHistoryAsync()
+        {
             var records = await _context.AnalysisRecord
                 .OrderByDescending(p => p.RunDate)
                 .Select(p => new AnalysisHistoryDto
@@ -79,7 +84,7 @@ namespace ResumeAnalyzerAPI.Services
                     Skills = p.Skills,
                     MatchedSkills = p.MatchedSkills,
                     UnmatchedSkills = p.UnmatchedSkills,
-                    MatchPercentage = Math.Round(p.MatchPercentage,2),
+                    MatchPercentage = Math.Round(p.MatchPercentage, 2),
                     RunDate = p.RunDate
                 })
                 .ToListAsync();
@@ -99,9 +104,9 @@ namespace ResumeAnalyzerAPI.Services
 
         private static string BuildSkillPattern(string skill)
         {
-            var word =skill.Split(' ');
+            var word = skill.Split(' ');
             var escapedSkill = word.Select(word => Regex.Escape(word));
-            var result = string.Join(@"[\s\-]+",escapedSkill);
+            var result = string.Join(@"[\s\-]+", escapedSkill);
             return $"(?<![\\p{{L}}\\p{{N}}]){result}(?![\\p{{L}}\\p{{N}}])";
         }
     }

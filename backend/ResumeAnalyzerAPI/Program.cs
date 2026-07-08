@@ -13,7 +13,7 @@ builder.Services.AddDbContext<ResumeAnalyzerDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-const stirng AllowedOrigins = "_ReactApp";
+const string AllowedOrigins = "_ReactApp";
 
 builder.Services.AddCors(options =>
 {
@@ -33,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.useCors(AllowedOrigins);
+app.UseCors(AllowedOrigins);
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

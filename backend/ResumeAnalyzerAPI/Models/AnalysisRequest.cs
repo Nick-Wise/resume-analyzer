@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ResumeAnalyzerAPI.Models
 {
@@ -11,6 +7,6 @@ namespace ResumeAnalyzerAPI.Models
         [Required]
         public required string JobDescription { get; set; }
         [Required]
-        public required List<string> Skills { get; set; }
+        public required string Skills { get; set; }
     }
 }

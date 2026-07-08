@@ -8,7 +8,7 @@ namespace ResumeAnalyzerAPI.Services
 {
     public interface IAnalysisService
     {
-        public Task<AnalysisResponse> AnalyzeAsync(string jobDescription, List<string> skills);
+        public Task<AnalysisResponse> AnalyzeAsync(string jobDescription, string skills);
         public Task<List<AnalysisHistoryDto>> GetHistoryAsync();
     }
 }
