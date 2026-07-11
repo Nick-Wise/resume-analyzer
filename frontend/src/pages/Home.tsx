@@ -49,24 +49,24 @@ export default function Home() {
 
 
   return (
-    <>
-      <section>
-        <form onSubmit={handleSubmit(OnSubmit)}>
+    <main className="h-screen flex items-center p-16 ">
+      <section className="flex flex-col flex-1 items-center h-full w-full p-4 bg-sky-100 rounded ">
+        <form className="flex flex-col flex-1 gap-3 items-center w-full h-full bg-white p-4 rounded" onSubmit={handleSubmit(OnSubmit)}>
 
-          <div>
-            <label>Job Description</label>
-            <textarea className="border" {...register("jobDescription")} />
+          <div className="flex flex-col gap-2  w-full">
+            <label className="text-xl">Skills:</label>
+            <input className="border rounded w-1/2" {...register("skills")} />
           </div>
 
-          <div>
-            <label>Skills</label>
-            <input {...register("skills")} />
+          <div className="flex flex-col gap-2 flex-1 w-full">
+            <label className="text-xl" >Job Description:</label>
+            <textarea className="border rounded h-full" {...register("jobDescription")} />
           </div>
-          <button>Submit</button>
+          <button className="text-xl text-white border rounded bg-sky-500/50 hover:bg-sky-700/50 p-2 w-1/2" >Submit</button>
         </form>
       </section>
     {result && 
-      <section>
+      <section className="flex flex-col flex-1" >
         <p>Matched Skills:</p>
         <ul>
           {result.matchedSkills.map((skill)=>(
@@ -82,7 +82,7 @@ export default function Home() {
         <p>Match Percentage: {result.matchPercentage.toFixed(2)}%</p>
       </section>
     } 
-    </>
+    </main>
   );
 
 }
