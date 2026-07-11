@@ -50,38 +50,51 @@ export default function Home() {
 
   return (
     <main className="h-screen flex items-center p-16 ">
-      <section className="flex flex-col flex-1 items-center h-full w-full p-4 bg-sky-100 rounded ">
-        <form className="flex flex-col flex-1 gap-3 items-center w-full h-full bg-white p-4 rounded" onSubmit={handleSubmit(OnSubmit)}>
+      <section className="flex flex-1 items-center gap-2 h-full w-full p-4 bg-sky-100 rounded ">
+        <div className="flex flex-1 items-center h-full w-full bg-white">
+          <form className="flex flex-col flex-1 gap-3 items-center w-full h-full  p-4 rounded" onSubmit={handleSubmit(OnSubmit)}>
+            <div className="flex flex-col gap-2  w-full">
+              <label className="text-xl">Skills:</label>
+              <input className="border rounded w-full" {...register("skills")} />
+            </div>
 
-          <div className="flex flex-col gap-2  w-full">
-            <label className="text-xl">Skills:</label>
-            <input className="border rounded w-1/2" {...register("skills")} />
-          </div>
+            <div className="flex flex-col gap-2 flex-1 w-full">
+              <label className="text-xl" >Job Description:</label>
+              <textarea className="border rounded h-full" {...register("jobDescription")} />
+            </div>
+            <button className="text-xl text-white border rounded bg-sky-500/50 hover:bg-sky-700/50 p-2 w-1/2" >Submit</button>
+          </form>
+        </div>
 
-          <div className="flex flex-col gap-2 flex-1 w-full">
-            <label className="text-xl" >Job Description:</label>
-            <textarea className="border rounded h-full" {...register("jobDescription")} />
+        {result &&
+          <div className="flex flex-col flex-1 h-full w-full items-center" >
+            <div className="grid grid-rows-[auto_1fr] justify-center w-full h-full bg-white p-4 rounded">
+              <h1 className="text-xl text-center pb-20">Results</h1>
+              <div className="flex flex-col gap-2">
+                <p className="text-xl">Matched Skills:</p>
+                <div className="flex flex-col items-center">
+                  <ul className="list-disc">
+                    {result.matchedSkills.map((skill) => (
+                      <li key={skill}>{skill}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="text-xl">Unmatched Skills:</p>
+                <div className="flex flex-col items-center">
+                  <ul className="list-disc">
+                    {result.unmatchedSkills.map((skill) => (
+                      <li key={skill}>{skill}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="text-xl">Match Percentage: {result.matchPercentage.toFixed(2)}%</p>
+              </div>
+            </div>
           </div>
-          <button className="text-xl text-white border rounded bg-sky-500/50 hover:bg-sky-700/50 p-2 w-1/2" >Submit</button>
-        </form>
+        }
       </section>
-    {result && 
-      <section className="flex flex-col flex-1" >
-        <p>Matched Skills:</p>
-        <ul>
-          {result.matchedSkills.map((skill)=>(
-            <li key={skill}>{skill}</li>
-          ))}
-        </ul>
-        <p>Unmatched Skills:</p>
-        <ul>
-          {result.unmatchedSkills.map((skill)=>(
-            <li key={skill}>{skill}</li>
-          ))}
-        </ul>
-        <p>Match Percentage: {result.matchPercentage.toFixed(2)}%</p>
-      </section>
-    } 
     </main>
   );
 
