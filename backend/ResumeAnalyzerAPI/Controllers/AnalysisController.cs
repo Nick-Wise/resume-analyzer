@@ -43,5 +43,16 @@ namespace ResumeAnalyzerAPI.Controllers
             var result = await _analysisService.AnalyzeAsync(request.JobDescription, request.Skills);
             return Ok(result);
         }
+
+        [HttpGet("GetAnalysisById/{id}")]
+        public async Task<IActionResult> GetAnalysisById(int id)
+        {
+            var result = await _analysisService.GetAnalysisByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound($"No analysis found with ID {id}.");
+            }
+            return Ok(result);
+        }
     }
 }

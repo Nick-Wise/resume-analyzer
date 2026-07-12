@@ -6,6 +6,8 @@ namespace ResumeAnalyzerAPI.Models
     public class AnalysisResponse
     {
         [Required]
+        public int Id { get; set; }
+        [Required]
         public required List<string> MatchedSkills { get; set; }
         [Required]
         public required List<string> UnmatchedSkills { get; set; }

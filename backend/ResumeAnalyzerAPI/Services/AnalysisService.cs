@@ -23,7 +23,7 @@ namespace ResumeAnalyzerAPI.Services
         {
 
             var skillsList = skills.Split(",").ToList();
-            
+
 
             var _matchedSkills = new List<string>();
             var _unmatchedSkills = new List<string>();
@@ -46,17 +46,11 @@ namespace ResumeAnalyzerAPI.Services
 
                 }
             }
-            var trimmedSkills =_matchedSkills.Concat(_unmatchedSkills).ToList();
+            var trimmedSkills = _matchedSkills.Concat(_unmatchedSkills).ToList();
             var totalSkillsCount = trimmedSkills.Count();
             var _matchPercentage = totalSkillsCount == 0
                 ? 0m
-                : (decimal)_matchedSkills.Count / totalSkillsCount  * 100;
-            var response = new AnalysisResponse
-            {
-                MatchedSkills = _matchedSkills,
-                UnmatchedSkills = _unmatchedSkills,
-                MatchPercentage = _matchPercentage
-            };
+                : (decimal)_matchedSkills.Count / totalSkillsCount * 100;
 
             var analysisRecord = new AnalysisRecord
             {
@@ -70,7 +64,31 @@ namespace ResumeAnalyzerAPI.Services
             await _context.AnalysisRecord.AddAsync(analysisRecord);
             await _context.SaveChangesAsync();
 
+            var response = new AnalysisResponse
+            {
+                Id = analysisRecord.Id,
+                MatchedSkills = _matchedSkills,
+                UnmatchedSkills = _unmatchedSkills,
+                MatchPercentage = _matchPercentage
+            };
             return response;
+        }
+
+        public async Task<AnalysisResponse?> GetAnalysisByIdAsync(int id)
+        {
+            var record = await _context.AnalysisRecord.FindAsync(id);
+            if (record == null)
+            {
+                return null;
+            }
+
+            return new AnalysisResponse
+            {
+                Id = record.Id,
+                MatchedSkills = record.MatchedSkills,
+                UnmatchedSkills = record.UnmatchedSkills,
+                MatchPercentage = record.MatchPercentage
+            };
         }
 
         public async Task<List<AnalysisHistoryDto>> GetHistoryAsync()

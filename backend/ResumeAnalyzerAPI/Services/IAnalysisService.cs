@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ResumeAnalyzerAPI.Models;
 
 namespace ResumeAnalyzerAPI.Services
@@ -10,5 +6,6 @@ namespace ResumeAnalyzerAPI.Services
     {
         public Task<AnalysisResponse> AnalyzeAsync(string jobDescription, string skills);
         public Task<List<AnalysisHistoryDto>> GetHistoryAsync();
+        public Task<AnalysisResponse?> GetAnalysisByIdAsync(int id);
     }
 }
