@@ -4,8 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { AnalysisRequest } from "../types/AnalysisRequest";
 import type { AnalysisResponse } from "../types/AnalysisResponse";
 import { useState } from "react";
+import type { Dispatch} from "react";
+import type { SetStateAction} from "react";
 
-export default function Home() {
+export default function Home({setCache} : {setCache : Dispatch<SetStateAction<Record<string,AnalysisResponse>>>}) {
   //add loading state
   const [result, setResult] = useState<AnalysisResponse | null>(null);
 
