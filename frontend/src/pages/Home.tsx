@@ -5,8 +5,10 @@ import type { AnalysisRequest } from "../types/AnalysisRequest";
 import type { AnalysisResponse } from "../types/AnalysisResponse";
 import type { Dispatch} from "react";
 import type { SetStateAction} from "react";
+import { useNavigate} from "react-router-dom";
 
 export default function Home({setCache} : {setCache : Dispatch<SetStateAction<Record<string,AnalysisResponse>>>}) {
+  const navigate = useNavigate();
 
   const AnalysisRequestSchema = z.object({
     jobDescription: z.string().min(1, "Job Description is Required"),
@@ -44,7 +46,7 @@ export default function Home({setCache} : {setCache : Dispatch<SetStateAction<Re
 
     setCache(prev => ({...prev, [responseResult.id]: responseResult}));
 
-    console.log("Submitted and cached")
+    navigate(`/results/${responseResult.id}`)
   }
 
 

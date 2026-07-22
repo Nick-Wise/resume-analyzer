@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path ="/" element = {<Home setCache = {setAnalysisCache} />}/>
-        <Route path ="/results/:id" element = {<Result/>}/>
+        <Route path ="/results/:resultId" element = {<Result cache = {analysisCache}/>}/>
       </Routes>
     </BrowserRouter>
   )
