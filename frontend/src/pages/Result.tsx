@@ -2,7 +2,7 @@ import type { AnalysisResponse } from "../types/AnalysisResponse";
 import { useParams} from "react-router-dom";
 import {useState,useEffect} from 'react'
 
-export default function Result({cache}: {cache : Record<string,AnalysisResponse> }){
+export default function Result({cache}: {cache : Record<string,AnalysisResponse>}) {
   type RouteParams = {resultId : string};
   const {resultId} = useParams<RouteParams>();
 
@@ -12,34 +12,55 @@ export default function Result({cache}: {cache : Record<string,AnalysisResponse>
     )
   }
 
-  const [analysis, setAnalysis] = useState(cache[resultId]);
+  const [analysis, setAnalysis] = useState<AnalysisResponse | undefined>(cache[resultId]);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect( () => {
+    let ignore = false;
+
     const fetchAnalysis = async () => {
       try{
         const response = await fetch(`http://localhost:5185/api/Analysis/GetAnalysisById/${resultId}`)
-
-      if(!response.ok){
+        if(!response.ok){
+          throw new Error('Failed to fetch analysis')
+        }
+        const analysisResponse = await response.json();
+          return analysisResponse as AnalysisResponse
+      }
+      catch
+      {
         setErrorMessage('Failed to load analysis')
-        return {} as AnalysisResponse
-      }
-      }
-     
-      const analysisResponse = await response.json();
-      return analysisResponse as AnalysisResponse
+        return
+      } 
     }
 
     if(analysis === undefined){
-     const result = fetchAnalysis()
-     setAnalysis[result]
+     fetchAnalysis().then( (result) =>{
+      if(!ignore){
+        setAnalysis(result)
+      }
+     })
+    }
+
+    return () => {
+      ignore = true;
     }
 
   },[resultId])
 
  
 
- 
+if(errorMessage){
+  return(
+    <p>{errorMessage}</p>
+  )
+}
+else if(analysis === undefined){
+  return(
+    <p>Loading...</p>
+  )
+}
+else{
   return(
           <div className="flex flex-col flex-1 h-full w-full items-center" >
             <div className="grid grid-rows-[auto_1fr] justify-center w-full h-full bg-white p-4 rounded">
@@ -68,4 +89,5 @@ export default function Result({cache}: {cache : Record<string,AnalysisResponse>
             </div>
           </div>
   )
+  }
 }
